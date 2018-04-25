@@ -1,36 +1,34 @@
-node {
-    def app
+pipeline {
 
-    stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
+  agent {
+    docker {
+      image: 'node:latest'
+    } 
+  }
 
-        checkout scm
-    }
+  parameters {
+      string(name: 'staging_server', defaultValue: '18.184.0.134', description: 'Staging server')
+      string(name: 'tomcat_prod', defaultValue: '18.197.95.235', description: 'Production server')
+  }
 
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
+  trigger {
+    pollSCM('')
+  }
 
-        app = docker.build("getintodevops/hellonode")
+  stages {
+    stage('Build') {
+      npm install
     }
 
     stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
+      npm test
     }
 
     stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-        }
+      //scp with sshAgent
     }
+
+  }
+
+
 }
