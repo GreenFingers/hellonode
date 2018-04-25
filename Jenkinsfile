@@ -39,6 +39,7 @@ pipeline {
         sshagent (credentials: ['ec2-staging']) {
           sh 'rm -rf .git'
           sh "scp -o StrictHostKeyChecking=no -r . ${params.deploy_user}@${params.staging_server}:~/www/"
+          sh "ssh -o StrictHostKeyChecking=no ${params.deploy_user}@${params.staging_server} pm2 restart ~/www/main.js"       
         }
       }
     }
