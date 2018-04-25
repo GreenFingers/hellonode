@@ -17,15 +17,21 @@ pipeline {
 
   stages {
     stage('Build') {
-      npm install
+      steps {
+        sh 'npm install'
+      }
     }
 
     stage('Test image') {
-      npm test
+      steps {
+        sh 'npm test'
+      }
     }
 
     stage('Push image') {
-      //scp with sshAgent
+      steps {
+        //scp with sshAgent
+      }
     }
 
   }
