@@ -36,8 +36,9 @@ pipeline {
 
     stage('Push image') {
       steps {
-        //scp with sshAgent
-        echo 'empty step'
+        sshagent (credentials: ['ec2-staging']) {
+          sh "scp -o StrictHostKeyChecking=no -r . ${params.deploy_user}@${params.staging_server}:~/www/"
+        }
       }
     }
 
