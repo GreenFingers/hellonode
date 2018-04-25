@@ -31,6 +31,7 @@ pipeline {
     stage('Push image') {
       steps {
         //scp with sshAgent
+        echo 'empty step'
       }
     }
 
