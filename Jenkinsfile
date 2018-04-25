@@ -11,7 +11,7 @@ pipeline {
       string(name: 'tomcat_prod', defaultValue: '18.197.95.235', description: 'Production server')
   }
 
-  trigger {
+  triggers {
     pollSCM('')
   }
 
