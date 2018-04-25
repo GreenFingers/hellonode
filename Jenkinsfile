@@ -36,10 +36,10 @@ pipeline {
 
     stage('Push image') {
       steps {
-        sshagent (credentials: ['ec2-staging']) {
+        withCredentials([sshUserPrivateKey(credentialsId:'ec2-staging', keyFileVariable:'keyfile')]) {
           sh 'rm -rf .git'
-          sh "scp -o StrictHostKeyChecking=no -r . ${params.deploy_user}@${params.staging_server}:~/www/"
-          sh "ssh -o StrictHostKeyChecking=no ${params.deploy_user}@${params.staging_server} /home/${params.deploy_user}/www/start.sh"
+          sh "scp -o StrictHostKeyChecking=no -i ${keyfile} -r . ${params.deploy_user}@${params.staging_server}:~/www/"
+          sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} ${params.deploy_user}@${params.staging_server} /home/${params.deploy_user}/www/start.sh"
         }
       }
     }
