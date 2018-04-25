@@ -8,7 +8,7 @@ pipeline {
 
   parameters {
       string(name: 'staging_server', defaultValue: '18.184.0.134', description: 'Staging server')
-      string(name: 'tomcat_prod', defaultValue: '18.197.95.235', description: 'Production server')
+      string(name: 'deploy_user', defaultValue: 'ec2-user', description: 'Production server')
   }
 
   triggers {
@@ -19,6 +19,12 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm install'
+      }
+      post {
+        success {
+            echo 'Now archiving...'
+            archiveArtifacts artifacts: '**/*'
+        }
       }
     }
 
