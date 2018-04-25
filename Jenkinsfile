@@ -23,7 +23,7 @@ pipeline {
       post {
         success {
             echo 'Now archiving...'
-            archiveArtifacts artifacts: '**/node_modules/*'
+            archiveArtifacts artifacts: '**/*'
         }
       }
     }
