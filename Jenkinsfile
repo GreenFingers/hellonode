@@ -34,8 +34,9 @@ pipeline {
       }
     }
 
-    stage('Push image') {
+    stage('Deploy to staging') {
       steps {
+        input 'Deploy this build to staging?'
         sshagent (credentials: ['ec2-staging']) {
           sh 'rm -rf .git'
           sh "scp -o StrictHostKeyChecking=no -r . ${params.deploy_user}@${params.staging_server}:~/www/"
